@@ -73,25 +73,26 @@ while running:
         pag.keyUp(key)
         time.sleep(0.3)
 
+        # se não der match com a cor de referência é porque entrou em luta
+        # mas o ideal seria ficar rodando até não dar match com a cor de referência
+        
         if not pag.pixelMatchesColor(*reference_position, reference_color, tolerance=5):
             while not pag.pixelMatchesColor(*fight_position, fight_color, tolerance=5):
                 time.sleep(0.3)
                 if not running:
                     break
-            try:
-                result = combat()
-                print(result)  # Debug
-                if not result:
-                    break
-            except Exception as e:
-                print(f"Ocorreu um erro: {e}")
-                break
+
+            print(combat())  # Debug
+
         else:
             time.sleep(0.5)
-            continue
 
         if not running:
             break
+    
+    print("está no while") # Debug
+        
+# TODO: Ele não esta retomando a movimentação normal depois de encerrar um combate
 
 # Aguarda o listener finalizar
 listener.join()
