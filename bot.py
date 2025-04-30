@@ -11,7 +11,7 @@ fight_position = (683, 539)
 fight_color = (235, 56, 56)
 
 # (position_x, position_y, priority, PP)
-moveset = [(571, 532, False, 40), (796, 530, True, 25), (573, 646, False, 5), (796, 646, True, 15)]
+moveset = [[571, 532, False, 40], [796, 530, True, 25], [573, 646, False, 5], [796, 646, True, 15]]
 
 running = True  # Controle principal do loop
 
@@ -22,6 +22,7 @@ def check_quit(key):
         running = False
         return False  # Encerra o listener
 
+# Retorna True se ainda existirem movimentos de dano disponíveis
 def check_availability():
     flag = 0
     for current in moveset:
@@ -30,25 +31,26 @@ def check_availability():
     return flag != sum(1 for current in moveset if current[2] == True)
 
 def combat():
-    pag.moveTo(685, 578)  # Clica no botão "Fight"
+    pag.moveTo(*fight_position)  # Clica no botão "Fight"
     pag.mouseDown()
-    time.sleep(0.5)
+    time.sleep(0.3)
     pag.mouseUp()
     time.sleep(0.5)
 
+    # Se não houver movimentos disponíveis, retorna False
+    # TODO: Adicionar um alerta para o usuário
     if not check_availability():
         return False
 
     for current in moveset:
-        if current[2] == True and current[3] > 0:
-            pag.moveTo(current[0], current[1])
+        if current[2] == True and current[3] != 0:
+            pag.moveTo(*(current[0], current[1]))
             pag.mouseDown()
             time.sleep(0.5)
             pag.mouseUp()
             time.sleep(0.5)
             current[3] -= 1
             break
-
     return True
 
 # Alerta inicial
